@@ -69,6 +69,10 @@
 		{
 			for (var a:int = 0; a < keywords.length; a++)
 			{
+				if (keywords[a].charCodeAt() >= characters.length)
+				{
+					continue;
+				}
 				if (characters[keywords[a].charCodeAt()] == null)
 				{
 					characters[keywords[a].charCodeAt()] = new LinkedList();
@@ -155,6 +159,8 @@
 			if (running)
 			{
 				running = false;
+				inputAt = -1;
+				inputPrevSize = 0;
 				removeChild(inputTextField);
 			}
 			else
@@ -168,7 +174,7 @@
 		
 		public function validCommand():Boolean
 		{
-			if (inputTextField.text.length <= 0)
+			if (inputTextField.text.length <= 0 || inputTextField.text.charCodeAt() >= characters.length)
 			{
 				return false;
 			}

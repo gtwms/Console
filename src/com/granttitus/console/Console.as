@@ -95,7 +95,7 @@
 				inputTextField.text = inputTextField.text.substring(0, inputTextField.length - 2);
 			}
 			
-			// if user deletes one character, all get deleted
+			// if user deletes one character, delete all text
 			if (inputTextField.text.length < inputPrevSize)
 			{
 				inputTextField.text = "";
@@ -103,50 +103,63 @@
 				inputPrevSize = 0;
 			}
 			
-			// remove all suggestion text
+			// remove suggestion text if user is typing
 			if (inputAt != -1)
 			{
 				inputTextField.text = inputTextField.text.substring(0, inputAt + 1);
 			}
 			
-			// add suggestion text
+			// add suggestion text if user is typing
 			if (inputTextField.text.length > 0 && characters[inputTextField.text.charCodeAt()] != null)
 			{
-				var found:Boolean = false; // whether a match exists
-				var continuous:Boolean = true; // each character in string matches
-				var node:Node = characters[inputTextField.text.charCodeAt()].getHead();
+				var node:Node = null;
+				var foundMatch:Boolean = false; // whether a match exists
 				outerloop: for (var a:int = 0; a < characters[inputTextField.text.charCodeAt()].getSize(); a++)
 				{
-					for (var b:int = 0; b < inputTextField.text.length; b++)
+					if (node == null)
 					{
-						if (inputTextField.text.charAt(b) != node.getData().charAt(b))
-						{
-							break outerloop;
-						}
+						node = characters[inputTextField.text.charCodeAt()].getHead();
 					}
-					if (inputTextField.text.charAt(inputTextField.text.length - 1) == node.getData().charAt(inputTextField.text.length - 1))
+					else
 					{
-						found = true;
-						inputAt = inputTextField.text.length;
-						inputTextField.appendText((node.getData().substring(inputAt)));
-						if (inputAt <= inputTextField.text.length - 1)
-						{
-							inputTextField.setTextFormat(suggestionStartTextFormat, inputAt, inputAt + 1);
-						}
-						if (inputAt < inputTextField.text.length - 1)
-						{
-							inputTextField.setTextFormat(suggestionTextFormat, inputAt + 1, inputTextField.text.length);
-						}
-						break;
+						node = node.getNext();
 					}
-					
-					node = node.getNext();
 					if (node == null)
 					{
 						break;
 					}
+					
+					// make sure each character in string matches, not just most recent
+					for (var b:int = 0; b < inputTextField.text.length; b++)
+					{
+						if (inputTextField.text.charAt(b) != node.getData().charAt(b))
+						{
+							continue outerloop;
+						}
+					}
+
+					// if found match, apply suggestion and end search
+					if (inputTextField.text.charAt(inputTextField.text.length - 1) == node.getData().charAt(inputTextField.text.length - 1))
+					{
+						foundMatch = true;
+						inputAt = inputTextField.text.length;
+						inputTextField.appendText((node.getData().substring(inputAt)));
+						
+						if (inputAt <= inputTextField.text.length - 1)
+						{
+							inputTextField.setTextFormat(suggestionStartTextFormat, inputAt, inputAt + 1);
+						}
+						
+						if (inputAt < inputTextField.text.length - 1)
+						{
+							inputTextField.setTextFormat(suggestionTextFormat, inputAt + 1, inputTextField.text.length);
+						}
+						
+						break;
+					}
 				}
-				if (!found)
+				
+				if (!foundMatch)
 				{
 					inputAt = -1;
 				}

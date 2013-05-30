@@ -26,7 +26,7 @@
 			
 			gConsole = new Console();
 			gConsole.keywords = new Vector.<String>();
-			gConsole.keywords.push("level editor", "play");
+			gConsole.keywords.push("demo one", "demo two", "action one", "action two");
 			addChild(gConsole);
 		}
 		
@@ -34,7 +34,7 @@
 		{
 			if (gConsoleKeyDelay < 10)
 				gConsoleKeyDelay++;
-			if (keys.tilda() && gConsoleKeyDelay >= 10)
+			if (keys.tilde() && gConsoleKeyDelay >= 10)
 			{
 				gConsoleKeyDelay = 0;
 				gConsole.toggle();

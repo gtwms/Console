@@ -11,7 +11,7 @@
 		
 		private var pressSpace:Boolean = false;
 		private var pressEnter:Boolean = false;
-		private var pressTilda:Boolean = false;
+		private var pressTilde:Boolean = false;
 		
 		private var pressP:Boolean = false;
 		private var pressQ:Boolean = false;
@@ -91,9 +91,9 @@
 			return pressD;
 		}
 		
-		public function tilda():Boolean
+		public function tilde():Boolean
 		{
-			return pressTilda;
+			return pressTilde;
 		}
 		
 		public function enter():Boolean
@@ -153,7 +153,7 @@
 			}
 			if (event.keyCode == 192)
 			{
-				pressTilda = true;
+				pressTilde = true;
 			}
 			if (event.keyCode == 13)
 			{
@@ -213,7 +213,7 @@
 			}
 			if (event.keyCode == 192)
 			{
-				pressTilda = false;
+				pressTilde = false;
 			}
 			if (event.keyCode == 13)
 			{

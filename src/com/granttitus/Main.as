@@ -7,10 +7,7 @@
 	
 	public class Main extends Sprite
 	{
-		private var gConsole:Console;
-		private var gConsoleKeyDelay:int;
-		
-		private var keys:Keys;
+		private var con:Console;
 		
 		public function Main() 
 		{
@@ -21,33 +18,19 @@
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			addEventListener(Event.ENTER_FRAME, update);
-			
-			keys = new Keys(stage);
-			
-			gConsole = new Console();
-			gConsole.keywords = new Vector.<String>();
-			gConsole.keywords.push("demo one", "demo two", "action one", "action two");
-			addChild(gConsole);
+
+			con = new Console();
+			con.keywords = new Vector.<String>();
+			con.keywords.push("demo one", "demo two", "action one", "action two");
+			addChild(con);
 		}
 		
 		private function update(e:Event):void
 		{
-			if (gConsoleKeyDelay < 10)
-				gConsoleKeyDelay++;
-			if (keys.tilde() && gConsoleKeyDelay >= 10)
+			if (con.hasCommand())
 			{
-				gConsoleKeyDelay = 0;
-				gConsole.toggle();
-			}
-			if (keys.enter() && gConsole.isRunning() && gConsoleKeyDelay >= 10)
-			{
-				gConsoleKeyDelay = 0;
-				if (gConsole.validCommand())
-				{
-					// do something with command
-					trace(gConsole.getText());
-				}
-				gConsole.toggle();
+				// do something with command
+				trace("Command: " + con.getCommand());
 			}
 		}
 	}

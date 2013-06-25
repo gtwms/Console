@@ -4,221 +4,101 @@
 	
 	public class Keys
 	{
-		private var pressLeft:Boolean = false;
-		private var pressRight:Boolean = false;
-		private var pressUp:Boolean = false;
-		private var pressDown:Boolean = false;
+		private var reference:Object;
+		private var _keys:Vector.<Boolean>;
 		
-		private var pressSpace:Boolean = false;
-		private var pressEnter:Boolean = false;
-		private var pressTilde:Boolean = false;
-		
-		private var pressP:Boolean = false;
-		private var pressQ:Boolean = false;
-		private var pressR:Boolean = false;
-		
-		private var pressA:Boolean = false;
-		private var pressW:Boolean = false;
-		private var pressS:Boolean = false;
-		private var pressD:Boolean = false;
-		
-		private var referance:Object;
-		
-		public function Keys (_referance:Object):void
+		public function Keys (_reference:Object):void
 		{
-			referance = _referance;
-			referance.addEventListener(KeyboardEvent.KEY_DOWN, _keyDown);
-			referance.addEventListener(KeyboardEvent.KEY_UP, _keyUp);
+			reference = _reference;
+			reference.addEventListener(KeyboardEvent.KEY_DOWN, listenerKeyDown);
+			reference.addEventListener(KeyboardEvent.KEY_UP, listenerKeyUp);
+
+			_keys = new Vector.<Boolean>(256);
+		}
+
+		private function listenerKeyDown (event:KeyboardEvent):void
+		{
+			_keys[event.keyCode] = true;
+		}
+		
+		private function listenerKeyUp(event:KeyboardEvent):void
+		{
+			_keys[event.keyCode] = false;
+		}
+
+		public function get keyDown()
+		{
+			return _keys;
 		}
 
 		public function left():Boolean
 		{
-			return pressLeft;
+			return _keys[37];
 		}
 		
 		public function right():Boolean
 		{
-			return pressRight;
+			return _keys[39];
 		}
 		
 		public function up():Boolean
 		{
-			return pressUp;
+			return _keys[38];
 		}
 		
 		public function down():Boolean
 		{
-			return pressDown;
+			return _keys[40];
 		}
 		
 		public function space():Boolean
 		{
-			return pressSpace;
+			return _keys[32];
 		}
 		
 		public function q():Boolean
 		{
-			return pressQ;
+			return _keys[81];
 		}
 		
 		public function p():Boolean
 		{
-			return pressP;
+			return _keys[80];
 		}
 		
 		public function r():Boolean
 		{
-			return pressR;
+			return _keys[82];
 		}
 		
 		public function w():Boolean
 		{
-			return pressW;
+			return _keys[87];
 		}
 		
 		public function s():Boolean
 		{
-			return pressS;
+			return _keys[83];
 		}
 		
 		public function a():Boolean
 		{
-			return pressA;
+			return _keys[65];
 		}
 		
 		public function d():Boolean
 		{
-			return pressD;
+			return _keys[68];
 		}
 		
 		public function tilde():Boolean
 		{
-			return pressTilde;
+			return _keys[192];
 		}
 		
 		public function enter():Boolean
 		{
-			return pressEnter;
-		}
-		
-		private function _keyDown (event:KeyboardEvent):void
-		{
-			if (event.keyCode == 32)
-			{
-				pressSpace = true;
-			}
-			if (event.keyCode == 37)
-			{
-				pressLeft = true;
-			}
-			if (event.keyCode == 38)
-			{
-				pressUp = true;
-			}
-			if (event.keyCode == 39)
-			{
-				pressRight = true;
-			}
-			if (event.keyCode == 40)
-			{
-				pressDown = true;
-			}
-			if (event.keyCode == 80)
-			{
-				pressP = true;
-			}
-			if (event.keyCode == 81)
-			{
-				pressQ = true;
-			}
-			if (event.keyCode == 82)
-			{
-				pressR = true;
-			}
-			if (event.keyCode == 65)
-			{
-				pressA = true;
-			}
-			if (event.keyCode == 87)
-			{
-				pressW = true;
-			}
-			if (event.keyCode == 83)
-			{
-				pressS = true;
-			}
-			if (event.keyCode == 68)
-			{
-				pressD = true;
-			}
-			if (event.keyCode == 192)
-			{
-				pressTilde = true;
-			}
-			if (event.keyCode == 13)
-			{
-				pressEnter = true;
-			}
-		}
-		
-		private function _keyUp(event:KeyboardEvent):void
-		{
-			if (event.keyCode == 32)
-			{
-				pressSpace = false;
-			}
-			if (event.keyCode == 37)
-			{
-				pressLeft = false;
-			}
-			if (event.keyCode == 38)
-			{
-				pressUp = false;
-			}
-			if (event.keyCode == 39)
-			{
-				pressRight = false;
-			}
-			if (event.keyCode == 40)
-			{
-				pressDown = false;
-			}
-			if (event.keyCode == 80)
-			{
-				pressP = false;
-			}
-			if (event.keyCode == 81)
-			{
-				pressQ = false;
-			}
-			if (event.keyCode == 82)
-			{
-				pressR = false;
-			}
-			if (event.keyCode == 65)
-			{
-				pressA = false;
-			}
-			if (event.keyCode == 87)
-			{
-				pressW = false;
-			}
-			if (event.keyCode == 83)
-			{
-				pressS = false;
-			}
-			if (event.keyCode == 68)
-			{
-				pressD = false;
-			}
-			if (event.keyCode == 192)
-			{
-				pressTilde = false;
-			}
-			if (event.keyCode == 13)
-			{
-				pressEnter = false;
-			}
+			return _keys[13];
 		}
 	}
 }

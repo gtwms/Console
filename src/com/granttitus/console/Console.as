@@ -3,12 +3,17 @@
 	import flash.text.*;
 	import flash.events.*;
 	import flash.display.*;
+	import api.Keys;
 	
 	public class Console extends Sprite
 	{
 		public var keywords:Vector.<String>;
+
+		private var keys:Keys;
+		private var keyDelay:int;
 		
 		private var characters:Vector.<LinkedList>;
+		private var command:String;
 		
 		private var inputTextField:TextField;
 		private var inputTextFormat:TextFormat;
@@ -18,7 +23,7 @@
 		
 		private var suggestionTextFormat:TextFormat;
 		private var suggestionStartTextFormat:TextFormat;
-		
+
 		private var running:Boolean;
 		
 		public function Console() 
@@ -28,6 +33,10 @@
 		
 		private function addedToStage(e:Event):void
 		{
+			keys = new Keys(stage);
+			running = false;
+			command = "";
+
 			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			
 			characters = new Vector.<LinkedList>(256, true);
@@ -61,9 +70,92 @@
 			suggestionStartTextFormat.font = inputFont.fontName;
 			suggestionStartTextFormat.color = 0xAAFFAA;
 			suggestionStartTextFormat.underline = true;
-			
-			running = false;
+
+			addEventListener(Event.ENTER_FRAME, update);
 		}
+
+		private function update(e:Event):void
+		{
+			if (keyDelay < 10)
+				keyDelay++;
+			if (keys.tilde() && keyDelay >= 10)
+			{
+				keyDelay = 0;
+				toggle();
+			}
+			if (keys.enter() && running && keyDelay >= 10)
+			{
+				keyDelay = 0;
+				command = "";
+				if (validCommand())
+				{
+					command = inputTextField.text;
+					toggle();	
+				}
+			}
+		}
+
+		public function hasCommand():Boolean
+		{
+			return command != "";
+		}
+
+		public function getCommand():String
+		{
+			var s:String = command;
+			command = "";
+			return s;
+		}
+
+		public function toggle():void
+		{
+			if (running)
+			{
+				running = false;
+				inputAt = -1;
+				inputPrevSize = 0;
+				stage.focus = null;
+				removeChild(inputTextField);
+			}
+			else
+			{
+				running = true;
+				inputTextField.text = "";
+				addChild(inputTextField);
+				stage.focus = inputTextField;
+			}
+		}
+		
+		private function validCommand():Boolean
+		{
+			if (inputTextField.text.length <= 0 || inputTextField.text.charCodeAt() >= characters.length)
+			{
+				return false;
+			}
+			if (characters[inputTextField.text.charCodeAt()] != null)
+			{
+				var node:Node = characters[inputTextField.text.charCodeAt()].getHead();
+				if (node == null)
+				{
+					return false;
+				}
+				for (var a:int = 0; a < characters[inputTextField.text.charCodeAt()].getSize(); a++)
+				{
+					if (inputTextField.text == node.getData())
+					{
+						return true;
+					}
+					node = node.getNext();
+					if (node == null)
+					{
+						return false;
+					}
+				}
+			}
+			return false;
+		}
+
+		// ---
 		
 		private function buildTable():void
 		{
@@ -165,63 +257,6 @@
 				}
 			}
 			inputPrevSize = inputTextField.text.length;
-		}
-		
-		public function toggle():void
-		{
-			if (running)
-			{
-				running = false;
-				inputAt = -1;
-				inputPrevSize = 0;
-				removeChild(inputTextField);
-			}
-			else
-			{
-				running = true;
-				inputTextField.text = "";
-				addChild(inputTextField);
-				stage.focus = inputTextField;
-			}
-		}
-		
-		public function validCommand():Boolean
-		{
-			if (inputTextField.text.length <= 0 || inputTextField.text.charCodeAt() >= characters.length)
-			{
-				return false;
-			}
-			if (characters[inputTextField.text.charCodeAt()] != null)
-			{
-				var node:Node = characters[inputTextField.text.charCodeAt()].getHead();
-				if (node == null)
-				{
-					return false;
-				}
-				for (var a:int = 0; a < characters[inputTextField.text.charCodeAt()].getSize(); a++)
-				{
-					if (inputTextField.text == node.getData())
-					{
-						return true;
-					}
-					node = node.getNext();
-					if (node == null)
-					{
-						return false;
-					}
-				}
-			}
-			return false;
-		}
-		
-		public function isRunning():Boolean
-		{
-			return running;
-		}
-		
-		public function getText():String
-		{
-			return inputTextField.text;
 		}
 	}
 }

@@ -7,7 +7,7 @@
 	
 	public class Console extends Sprite
 	{
-		public var keywords:Vector.<String>;
+		public var _commands:Vector.<String>;
 
 		private var keys:Keys;
 		private var keyDelay:int;
@@ -125,6 +125,15 @@
 				stage.focus = inputTextField;
 			}
 		}
+
+		public function get commands():Vector.<String>
+		{
+			if (_commands == null)
+			{
+				_commands = new Vector.<String>();
+			}
+			return _commands;
+		}
 		
 		private function validCommand():Boolean
 		{
@@ -154,22 +163,20 @@
 			}
 			return false;
 		}
-
-		// ---
 		
 		private function buildTable():void
 		{
-			for (var a:int = 0; a < keywords.length; a++)
+			for (var a:int = 0; a < _commands.length; a++)
 			{
-				if (keywords[a].charCodeAt() >= characters.length)
+				if (_commands[a].charCodeAt() >= characters.length)
 				{
 					continue;
 				}
-				if (characters[keywords[a].charCodeAt()] == null)
+				if (characters[_commands[a].charCodeAt()] == null)
 				{
-					characters[keywords[a].charCodeAt()] = new LinkedList();
+					characters[_commands[a].charCodeAt()] = new LinkedList();
 				}
-				characters[keywords[a].charCodeAt()].addString(keywords[a]);
+				characters[_commands[a].charCodeAt()].addString(_commands[a]);
 			}
 		}
 		

@@ -20,8 +20,7 @@
 			addEventListener(Event.ENTER_FRAME, update);
 
 			con = new Console();
-			con.keywords = new Vector.<String>();
-			con.keywords.push("demo one", "demo two", "action one", "action two");
+			con.commands.push("demo one", "demo two", "action one", "action two");
 			addChild(con);
 		}
 		
